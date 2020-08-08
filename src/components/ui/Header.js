@@ -11,6 +11,9 @@ import useMeidaQuery from "@material-ui/core/useMediaQuery";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 import { useTheme } from "@material-ui/styles";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import { makeStyles } from "@material-ui/styles";
@@ -91,6 +94,20 @@ const useStyles = makeStyles((theme) => ({
   drawerIcon: {
     height: 50,
     width: 50,
+  },
+  drawer: {
+    backgroundColor: theme.palette.common.blue,
+  },
+  drawerItem: {
+    ...theme.typography.tab,
+    color: "#fff",
+    opacity: 0.7,
+  },
+  drawerItemEstimate: {
+    backgroundColor: theme.palette.common.orange,
+  },
+  drawerItemSelected: {
+    opacity: 1,
   },
 }));
 
@@ -226,7 +243,13 @@ const Header = () => {
           label="Contact Us"
         />
       </Tabs>
-      <Button variant="contained" color="secondary" className={classes.button}>
+      <Button
+        variant="contained"
+        color="secondary"
+        component={Link}
+        to="/estimate"
+        className={classes.button}
+      >
         Free Estimate
       </Button>
       <Menu
@@ -265,8 +288,143 @@ const Header = () => {
         open={openDrawer}
         onClose={() => setOpenDrawer(false)}
         onOpen={() => setOpenDrawer(true)}
+        classes={{ paper: classes.drawer }}
       >
-        Hi Drawer
+        <List disablePadding>
+          <ListItem
+            divider
+            button
+            component={Link}
+            to="/"
+            onClick={() => {
+              setOpenDrawer(false);
+              setValue(0);
+            }}
+            selected={value === 0}
+          >
+            <ListItemText
+              className={
+                value === 0
+                  ? [classes.drawerItem, classes.drawerItemSelected]
+                  : classes.drawerItem
+              }
+              disableTypography
+            >
+              Home
+            </ListItemText>
+          </ListItem>
+          <ListItem
+            divider
+            button
+            component={Link}
+            to="/services"
+            onClick={() => {
+              setOpenDrawer(false);
+              setValue(1);
+            }}
+            selected={value === 1}
+          >
+            <ListItemText
+              className={
+                value === 1
+                  ? [classes.drawerItem, classes.drawerItemSelected]
+                  : classes.drawerItem
+              }
+              disableTypography
+            >
+              Services
+            </ListItemText>
+          </ListItem>
+          <ListItem
+            divider
+            button
+            component={Link}
+            to="/revolution"
+            onClick={() => {
+              setOpenDrawer(false);
+              setValue(2);
+            }}
+            selected={value === 2}
+          >
+            <ListItemText
+              className={
+                value === 2
+                  ? [classes.drawerItem, classes.drawerItemSelected]
+                  : classes.drawerItem
+              }
+              disableTypography
+            >
+              Revolution
+            </ListItemText>
+          </ListItem>
+          <ListItem
+            divider
+            button
+            component={Link}
+            to="/about"
+            onClick={() => {
+              setOpenDrawer(false);
+              setValue(3);
+            }}
+            selected={value === 3}
+          >
+            <ListItemText
+              className={
+                value === 3
+                  ? [classes.drawerItem, classes.drawerItemSelected]
+                  : classes.drawerItem
+              }
+              disableTypography
+            >
+              About
+            </ListItemText>
+          </ListItem>
+          <ListItem
+            divider
+            button
+            component={Link}
+            to="/contact"
+            onClick={() => {
+              setOpenDrawer(false);
+              setValue(4);
+            }}
+            selected={value === 4}
+          >
+            <ListItemText
+              className={
+                value === 4
+                  ? [classes.drawerItem, classes.drawerItemSelected]
+                  : classes.drawerItem
+              }
+              disableTypography
+            >
+              Contact
+            </ListItemText>
+          </ListItem>
+          <ListItem
+            divider
+            button
+            component={Link}
+            to="/estimate"
+            onClick={() => {
+              setOpenDrawer(false);
+              setValue(5);
+            }}
+            selected={value === 5}
+            className={classes.drawerItemEstimate}
+          >
+            <ListItemText
+              className={
+                value === 5
+                  ? [classes.drawerItem, classes.drawerItemSelected]
+                  : classes.drawerItem
+              }
+              disableTypography
+            >
+              Estimate
+            </ListItemText>
+          </ListItem>
+        </List>
       </SwipeableDrawer>
       <IconButton
         onClick={() => setOpenDrawer((prev) => !prev)}
