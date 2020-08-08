@@ -7,6 +7,11 @@ import Tab from "@material-ui/core/Tab";
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import useMeidaQuery from "@material-ui/core/useMediaQuery";
+import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
+import { useTheme } from "@material-ui/styles";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import { makeStyles } from "@material-ui/styles";
 import { Link } from "react-router-dom";
@@ -27,10 +32,22 @@ const ElevationScroll = ({ children }) => {
 const useStyles = makeStyles((theme) => ({
   toolbarMargin: {
     ...theme.mixins.toolbar, // To push content below AppBar
-    marginBottom: "3rem", // Offset added logo height
+    marginBottom: "3em", // Offset added logo height
+    [theme.breakpoints.down("md")]: {
+      marginBottom: "2em",
+    },
+    [theme.breakpoints.down("xs")]: {
+      marginBottom: "1.25em",
+    },
   },
   logo: {
-    height: "7rem",
+    height: "8em",
+    [theme.breakpoints.down("md")]: {
+      height: "7em",
+    },
+    [theme.breakpoints.down("xs")]: {
+      height: "5.5em",
+    },
   },
   tabContainer: {
     marginLeft: "auto",
@@ -65,14 +82,29 @@ const useStyles = makeStyles((theme) => ({
       opacity: 1,
     },
   },
+  drawerIconContainer: {
+    "&:hover": {
+      backgroundColor: "transparent",
+    },
+    marginLeft: "auto",
+  },
+  drawerIcon: {
+    height: 50,
+    width: 50,
+  },
 }));
 
 const Header = () => {
   const [value, setValue] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [open, setOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [openDrawer, setOpenDrawer] = useState(false);
   const classes = useStyles();
+  const theme = useTheme();
+  const matches = useMeidaQuery(theme.breakpoints.down("md"));
+
+  const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
 
   useEffect(() => {
     switch (window.location.pathname) {
@@ -130,23 +162,23 @@ const Header = () => {
     }
   }, []);
 
-  const handleChange = (evt, value) => {
-    setValue(value); // Setup click change tab, evt is required
+  const handleChange = (evt, newValue) => {
+    setValue(newValue); // Setup click change tab, evt is required
   };
 
   const handleClick = (evt) => {
     setAnchorEl(evt.currentTarget);
-    setOpen(true);
+    setOpenMenu(true);
   };
 
   const handleClose = (evt) => {
     setAnchorEl(null);
-    setOpen(false);
+    setOpenMenu(false);
   };
 
-  const handleMenuItemClick = (evt, idx) => {
+  const handleMenuItemClick = (idx) => {
     setAnchorEl(null);
-    setOpen(false);
+    setOpenMenu(false);
     setSelectedIndex(idx);
   };
 
@@ -156,6 +188,95 @@ const Header = () => {
     { name: "Mobile App Development", link: "/mobileapps" },
     { name: "Website Development", link: "/websites" },
   ];
+
+  const tabs = (
+    <Fragment>
+      <Tabs
+        value={value}
+        className={classes.tabContainer}
+        onChange={handleChange}
+        indicatorColor="primary"
+      >
+        <Tab className={classes.tab} component={Link} to="/" label="Home" />
+        <Tab
+          aria-owns={anchorEl ? "service-menu" : undefined}
+          aria-haspopup={anchorEl ? "true" : undefined}
+          onMouseOver={(evt) => handleClick(evt)}
+          className={classes.tab}
+          component={Link}
+          to="/services"
+          label="Services"
+        />
+        <Tab
+          className={classes.tab}
+          component={Link}
+          to="/revolution"
+          label="The Revolution"
+        />
+        <Tab
+          className={classes.tab}
+          component={Link}
+          to="/about"
+          label="About Us"
+        />
+        <Tab
+          className={classes.tab}
+          component={Link}
+          to="/contact"
+          label="Contact Us"
+        />
+      </Tabs>
+      <Button variant="contained" color="secondary" className={classes.button}>
+        Free Estimate
+      </Button>
+      <Menu
+        id="service-menu"
+        anchorEl={anchorEl}
+        open={openMenu}
+        onClose={handleClose}
+        classes={{ paper: classes.menu }}
+        elevation={0}
+        MenuListProps={{ onMouseLeave: handleClose }} // Props applied to the MenuList element.
+      >
+        {menuOptions.map((option, idx) => (
+          <MenuItem
+            key={idx}
+            onClick={() => {
+              handleMenuItemClick(idx);
+              setValue(1);
+            }}
+            component={Link}
+            to={option.link}
+            classes={{ root: classes.menuItem }}
+            selected={idx === selectedIndex && value === 1}
+          >
+            {option.name}
+          </MenuItem>
+        ))}
+      </Menu>
+    </Fragment>
+  );
+
+  const drawer = (
+    <Fragment>
+      <SwipeableDrawer
+        disableBackdropTransition={!iOS}
+        disableDiscovery={iOS}
+        open={openDrawer}
+        onClose={() => setOpenDrawer(false)}
+        onOpen={() => setOpenDrawer(true)}
+      >
+        Hi Drawer
+      </SwipeableDrawer>
+      <IconButton
+        onClick={() => setOpenDrawer((prev) => !prev)}
+        disableRipple
+        className={classes.drawerIconContainer}
+      >
+        <MenuIcon className={classes.drawerIcon} />
+      </IconButton>
+    </Fragment>
+  );
 
   return (
     <Fragment>
@@ -171,78 +292,7 @@ const Header = () => {
             >
               <img src={logo} alt="logo" className={classes.logo} />
             </Button>
-            <Tabs
-              value={value}
-              className={classes.tabContainer}
-              onChange={handleChange}
-              indicatorColor="primary"
-            >
-              <Tab
-                className={classes.tab}
-                component={Link}
-                to="/"
-                label="Home"
-              />
-              <Tab
-                aria-owns={anchorEl ? "service-menu" : undefined}
-                aria-haspopup={anchorEl ? "true" : undefined}
-                onMouseOver={(evt) => handleClick(evt)}
-                className={classes.tab}
-                component={Link}
-                to="/services"
-                label="Services"
-              />
-              <Tab
-                className={classes.tab}
-                component={Link}
-                to="/revolution"
-                label="The Revolution"
-              />
-              <Tab
-                className={classes.tab}
-                component={Link}
-                to="/about"
-                label="About Us"
-              />
-              <Tab
-                className={classes.tab}
-                component={Link}
-                to="/contact"
-                label="Contact Us"
-              />
-            </Tabs>
-            <Button
-              variant="contained"
-              color="secondary"
-              className={classes.button}
-            >
-              Free Estimate
-            </Button>
-            <Menu
-              id="service-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              classes={{ paper: classes.menu }}
-              elevation={0}
-              MenuListProps={{ onMouseLeave: handleClose }} // Props applied to the MenuList element.
-            >
-              {menuOptions.map((option, idx) => (
-                <MenuItem
-                  key={idx}
-                  onClick={(evt) => {
-                    handleMenuItemClick(evt, idx);
-                    setValue(1);
-                  }}
-                  component={Link}
-                  to={option.link}
-                  classes={{ root: classes.menuItem }}
-                  selected={idx === selectedIndex && value === 1}
-                >
-                  {option.name}
-                </MenuItem>
-              ))}
-            </Menu>
+            {matches ? drawer : tabs}
           </Toolbar>
         </AppBar>
       </ElevationScroll>
