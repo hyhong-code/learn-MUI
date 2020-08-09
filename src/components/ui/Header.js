@@ -1,4 +1,9 @@
 import React, { Fragment, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { makeStyles } from "@material-ui/styles";
+import { useTheme } from "@material-ui/styles";
+import useMeidaQuery from "@material-ui/core/useMediaQuery";
+import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 
 import AppBar from "@material-ui/core/Appbar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -7,17 +12,12 @@ import Tab from "@material-ui/core/Tab";
 import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import useMeidaQuery from "@material-ui/core/useMediaQuery";
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import { useTheme } from "@material-ui/styles";
-import useScrollTrigger from "@material-ui/core/useScrollTrigger";
-import { makeStyles } from "@material-ui/styles";
-import { Link } from "react-router-dom";
 
 import logo from "../../assets/logo.svg";
 
@@ -138,11 +138,9 @@ const menuOptions = [
   },
 ];
 
-const Header = () => {
-  const [value, setValue] = useState(0);
+const Header = ({ value, setValue, selectedIndex, setSelectedIndex }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openMenu, setOpenMenu] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(0);
   const [openDrawer, setOpenDrawer] = useState(false);
   const classes = useStyles();
   const theme = useTheme();
