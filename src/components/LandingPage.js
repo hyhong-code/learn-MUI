@@ -18,6 +18,8 @@ import websitesIcon from "../assets/websiteIcon.svg";
 import revolutionBackground from "../assets/repeatingBackground.svg";
 import infoBackground from "../assets/infoBackground.svg";
 
+import CallToAction from "./ui/CallToAction";
+
 const useStyle = makeStyles((theme) => ({
   animation: {
     maxWidth: "50em",
@@ -406,6 +408,10 @@ const LandingPage = () => {
 
           <div className={classes.infoBackground}></div>
         </Grid>
+      </Grid>
+      <Grid item>
+        {/* ----- CALL TO ACTION BLOCK ----- */}
+        <CallToAction />
       </Grid>
     </Grid>
   );
