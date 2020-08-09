@@ -113,7 +113,7 @@ const Footer = ({ value, setValue, selectedIndex, setSelectedIndex }) => {
                 item
                 className={classes.link}
               >
-                Mobile App Development
+                iOS / Android App Development
               </Grid>
               <Grid
                 component={Link}
