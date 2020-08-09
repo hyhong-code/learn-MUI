@@ -162,6 +162,9 @@ const Header = ({ value, setValue, selectedIndex, setSelectedIndex }) => {
             }
           }
           break;
+        case "/estimate":
+          setValue(false);
+          break;
         default:
           break;
       }
@@ -230,6 +233,7 @@ const Header = ({ value, setValue, selectedIndex, setSelectedIndex }) => {
         component={Link}
         to="/estimate"
         className={classes.button}
+        onClick={() => setValue(false)}
       >
         Free Estimate
       </Button>
@@ -301,7 +305,7 @@ const Header = ({ value, setValue, selectedIndex, setSelectedIndex }) => {
             to="/estimate"
             onClick={() => {
               setOpenDrawer(false);
-              setValue(5);
+              setValue(false);
             }}
             selected={value === 5}
             classes={{
