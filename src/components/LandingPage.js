@@ -16,6 +16,7 @@ import customSoftwareIcon from "../assets/Custom Software Icon.svg";
 import mobileAppsIcon from "../assets/mobileIcon.svg";
 import websitesIcon from "../assets/websiteIcon.svg";
 import revolutionBackground from "../assets/repeatingBackground.svg";
+import infoBackground from "../assets/infoBackground.svg";
 
 const useStyle = makeStyles((theme) => ({
   animation: {
@@ -110,6 +111,14 @@ const useStyle = makeStyles((theme) => ({
       width: "100%",
     },
   },
+  infoBackground: {
+    backgroundImage: `url(${infoBackground})`,
+    backgroundPosition: "center",
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    height: "100%",
+    width: "100%",
+  },
 }));
 
 const defaultOptions = {
@@ -125,6 +134,7 @@ const LandingPage = () => {
   const classes = useStyle();
   const theme = useTheme();
   const matchesSM = useMediaQuery(theme.breakpoints.down("sm"));
+  const matchesXS = useMediaQuery(theme.breakpoints.down("xs"));
 
   return (
     <Grid container direction="column" className={classes.mainContainer}>
@@ -280,6 +290,7 @@ const LandingPage = () => {
         </Grid>
       </Grid>
       <Grid item>
+        {/* ----- REVOLUTION BLOCK ----- */}
         <Grid
           container
           alignItems="center"
@@ -315,6 +326,85 @@ const LandingPage = () => {
             </CardContent>
           </Card>
           <div className={classes.revolutionBackground} />
+        </Grid>
+      </Grid>
+      <Grid item>
+        {/* ----- INFORMATION BLOCk ----- */}
+        <Grid
+          container
+          direction="row"
+          style={{ height: "80em" }}
+          alignItems="center"
+          justify="space-between"
+        >
+          <Grid
+            item
+            container
+            style={{
+              position: "absolute",
+              textAlign: matchesXS ? "center" : "inherit",
+            }}
+            direction={matchesXS ? "column" : "row"}
+          >
+            <Grid
+              item
+              sm
+              style={{ marginLeft: matchesXS ? 0 : matchesSM ? "2em" : "5em" }}
+            >
+              <Grid
+                container
+                direction="column"
+                style={{ marginBottom: matchesXS ? "5rem" : 0 }}
+              >
+                <Typography variant="h2" style={{ color: "#fff" }}>
+                  About Us
+                </Typography>
+                <Typography variant="subtitle2">Let's get personal</Typography>
+                <Grid item>
+                  <Button
+                    variant="outlined"
+                    className={classes.learnButtonHero}
+                    style={{ color: "#fff", borderColor: "#fff" }}
+                  >
+                    <span style={{ marginRight: 10 }}>Learn More</span>
+                    <ButtonArrow width={15} height={15} fill="#fff" />
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid
+              item
+              sm
+              style={{
+                marginRight: matchesXS ? 0 : matchesSM ? "2em" : "5em",
+                textAlign: matchesXS ? "center" : "right",
+              }}
+            >
+              <Grid container direction="column">
+                <Typography variant="h2" style={{ color: "#fff" }}>
+                  Contact Us
+                </Typography>
+                <Typography variant="subtitle2">
+                  Say Hello!{" "}
+                  <span role="img" aria-label="waving hand">
+                    👋
+                  </span>
+                </Typography>
+                <Grid item>
+                  <Button
+                    variant="outlined"
+                    className={classes.learnButtonHero}
+                    style={{ color: "#fff", borderColor: "#fff" }}
+                  >
+                    <span style={{ marginRight: 10 }}>Learn More</span>
+                    <ButtonArrow width={15} height={15} fill="#fff" />
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <div className={classes.infoBackground}></div>
         </Grid>
       </Grid>
     </Grid>
