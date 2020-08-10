@@ -169,6 +169,16 @@ const Header = ({ value, setValue, selectedIndex, setSelectedIndex }) => {
           break;
       }
     });
+    window.onpopstate = (e) => {
+      [...menuOptions, ...routes].forEach((route) => {
+        if (window.location.pathname === route.link) {
+          setValue(route.activeIndex);
+          if (route.selectedIndex !== null) {
+            setSelectedIndex(route.selectedIndex);
+          }
+        }
+      });
+    };
   }, []);
 
   const handleChange = (evt, newValue) => {
