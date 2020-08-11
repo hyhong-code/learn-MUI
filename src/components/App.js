@@ -10,6 +10,8 @@ import CustomSoftware from "./CustomSoftware";
 import MobileApps from "./MobileApps";
 import Websites from "./Websites";
 import Revolution from "./Revolution";
+import About from "./About";
+import Contact from "./Conatact";
 import Theme from "./ui/Theme";
 
 const App = () => {
@@ -92,8 +94,21 @@ const App = () => {
               />
             )}
           />
-          <Route exact path="/about" component={() => <div>About</div>} />
-          <Route exact path="/contact" component={() => <div>Contact</div>} />
+
+          <Route
+            exact
+            path="/about"
+            render={(routeProps) => <About {...routeProps} />}
+            setValue={setValue}
+            setSelectedIndex={setSelectedIndex}
+          />
+          <Route
+            exact
+            path="/contact"
+            render={(routeProps) => <Contact {...routeProps} />}
+            setValue={setValue}
+            setSelectedIndex={setSelectedIndex}
+          />
           <Route exact path="/estimate" component={() => <div>Estimate</div>} />
         </Switch>
         <Footer setValue={setValue} setSelectedIndex={setSelectedIndex} />
