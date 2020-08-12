@@ -105,9 +105,13 @@ const App = () => {
           <Route
             exact
             path="/contact"
-            render={(routeProps) => <Contact {...routeProps} />}
-            setValue={setValue}
-            setSelectedIndex={setSelectedIndex}
+            render={(routeProps) => (
+              <Contact
+                {...routeProps}
+                setValue={setValue}
+                setSelectedIndex={setSelectedIndex}
+              />
+            )}
           />
           <Route exact path="/estimate" component={() => <div>Estimate</div>} />
         </Switch>
