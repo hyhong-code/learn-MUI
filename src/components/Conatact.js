@@ -7,6 +7,8 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
 
 import background from "../assets/background.jpg";
 import phoneIcon from "../assets/phone.svg";
@@ -69,14 +71,20 @@ const useStyles = makeStyles((theme) => ({
     "&:hover": {
       backgroundColor: theme.palette.secondary.light,
     },
+    [theme.breakpoints.down("sm")]: {
+      height: 40,
+      width: 225,
+    },
   },
 }));
 
 const Conatact = ({ setValue }) => {
   const classes = useStyles();
   const theme = useTheme();
-  const matchesSM = useMediaQuery(theme.breakpoints.down("sm"));
+
   const matchesMD = useMediaQuery(theme.breakpoints.down("md"));
+  const matchesSM = useMediaQuery(theme.breakpoints.down("sm"));
+  const matchesXS = useMediaQuery(theme.breakpoints.down("xs"));
 
   const [formData, setFormData] = useState({
     name: "",
@@ -84,10 +92,10 @@ const Conatact = ({ setValue }) => {
     phone: "",
     message: "",
   });
-  const [nameHelper, setNameHelper] = useState("");
+
   const [emailHelper, setEmailHelper] = useState("");
   const [phoneHelper, setPhoneHelper] = useState("");
-  const [messageHelper, setMessageHelper] = useState("");
+  const [open, setOpen] = useState(false);
 
   const handleChange = (evt) => {
     const { value, id } = evt.target;
@@ -215,7 +223,7 @@ const Conatact = ({ setValue }) => {
               <Grid item style={{ marginBottom: "0.5em" }}>
                 <TextField
                   fullWidth
-                  error={emailHelper}
+                  error={!!emailHelper}
                   helperText={emailHelper}
                   label="Email"
                   id="email"
@@ -226,7 +234,7 @@ const Conatact = ({ setValue }) => {
               <Grid item style={{ marginBottom: "0.5em" }}>
                 <TextField
                   fullWidth
-                  error={phoneHelper}
+                  error={!!phoneHelper}
                   helperText={phoneHelper}
                   label="Phone"
                   id="phone"
@@ -261,6 +269,7 @@ const Conatact = ({ setValue }) => {
                     !phoneHelper
                   )
                 }
+                onClick={() => setOpen(true)}
               >
                 Send Message{" "}
                 <img
@@ -273,6 +282,120 @@ const Conatact = ({ setValue }) => {
           </Grid>
         </Grid>
       </Grid>
+
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        style={{ zIndex: 1302 }}
+        fullScreen={matchesXS ? true : false}
+        PaperProps={{
+          style: {
+            padding: matchesXS
+              ? `1em 1em`
+              : matchesSM
+              ? `1em 3em`
+              : matchesMD
+              ? `2em 5em`
+              : `5em 10em`,
+          },
+        }}
+      >
+        <DialogContent>
+          <Grid container direction="column">
+            <Grid item>
+              <Typography variant="h4" gutterBottom align="center">
+                Confirm Message
+              </Typography>
+            </Grid>
+
+            <Grid item style={{ marginBottom: "0.5em" }}>
+              <TextField
+                fullWidth
+                label="Name"
+                id="name"
+                value={name}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item style={{ marginBottom: "0.5em" }}>
+              <TextField
+                fullWidth
+                error={!!emailHelper}
+                helperText={emailHelper}
+                label="Email"
+                id="email"
+                value={email}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item style={{ marginBottom: "0.5em" }}>
+              <TextField
+                fullWidth
+                error={!!phoneHelper}
+                helperText={phoneHelper}
+                label="Phone"
+                id="phone"
+                value={phone}
+                onChange={handleChange}
+              />
+            </Grid>
+          </Grid>
+          <Grid item style={{ maxWidth: matchesXS ? "100%" : "20em" }}>
+            <TextField
+              fullWidth
+              value={message}
+              id="message"
+              onChange={handleChange}
+              multiline
+              rows={10}
+              className={classes.message}
+              InputProps={{ disableUnderline: true }}
+            />
+          </Grid>
+          <Grid
+            item
+            container
+            style={{ marginTop: "2em" }}
+            alignItems="center"
+            direction={matchesSM ? "column" : "row"}
+          >
+            <Grid item>
+              <Button
+                style={{ fontWeight: 300 }}
+                onClick={() => setOpen(false)}
+                color="primary"
+              >
+                Cancel
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                variant="contained"
+                className={classes.sendBtn}
+                disabled={
+                  !(
+                    name &&
+                    email &&
+                    phone &&
+                    message &&
+                    !emailHelper &&
+                    !phoneHelper
+                  )
+                }
+                onClick={() => setOpen(true)}
+              >
+                Send Message{" "}
+                <img
+                  src={airplane}
+                  alt="airplane"
+                  style={{ marginLeft: "1em" }}
+                />
+              </Button>
+            </Grid>
+          </Grid>
+        </DialogContent>
+      </Dialog>
+
       <Grid
         item
         lg={8}
