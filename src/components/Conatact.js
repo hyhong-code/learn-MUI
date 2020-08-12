@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { Link } from "react-router-dom";
 import { makeStyles, useTheme } from "@material-ui/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import axios from "axios";
 
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -9,6 +10,8 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Snackbar from "@material-ui/core/Snackbar";
 
 import background from "../assets/background.jpg";
 import phoneIcon from "../assets/phone.svg";
@@ -86,16 +89,27 @@ const Conatact = ({ setValue }) => {
   const matchesSM = useMediaQuery(theme.breakpoints.down("sm"));
   const matchesXS = useMediaQuery(theme.breakpoints.down("xs"));
 
-  const [formData, setFormData] = useState({
+  const [loading, setLoading] = useState(false);
+
+  const INITIAL_FORM_STATE = {
     name: "",
     email: "",
     phone: "",
     message: "",
-  });
+  };
+
+  const [formData, setFormData] = useState(INITIAL_FORM_STATE);
+
+  const { name, email, phone, message } = formData;
 
   const [emailHelper, setEmailHelper] = useState("");
   const [phoneHelper, setPhoneHelper] = useState("");
   const [open, setOpen] = useState(false);
+  const [alert, setAlert] = useState({
+    open: false,
+    message: "",
+    backgroundColor: "",
+  });
 
   const handleChange = (evt) => {
     const { value, id } = evt.target;
@@ -120,7 +134,45 @@ const Conatact = ({ setValue }) => {
     }
   };
 
-  const { name, email, phone, message } = formData;
+  const onConfirm = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get(
+        "https://us-central1-material-ui-75919.cloudfunctions.net/sendMail",
+        {
+          params: {
+            name,
+            email,
+            phone,
+            message,
+          },
+        }
+      );
+      setLoading(false);
+      setOpen(false);
+      setFormData(INITIAL_FORM_STATE);
+      setAlert({
+        open: true,
+        message: "Message sent successfully",
+        backgroundColor: "#4bb543",
+      });
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+      setAlert({
+        open: true,
+        message: "Something went wrong, please try again",
+        backgroundColor: "#ff3232",
+      });
+    }
+  };
+
+  const buttonContents = (
+    <Fragment>
+      Send Message{" "}
+      <img src={airplane} alt="airplane" style={{ marginLeft: "1em" }} />
+    </Fragment>
+  );
 
   return (
     <Grid container direction="row">
@@ -271,12 +323,7 @@ const Conatact = ({ setValue }) => {
                 }
                 onClick={() => setOpen(true)}
               >
-                Send Message{" "}
-                <img
-                  src={airplane}
-                  alt="airplane"
-                  style={{ marginLeft: "1em" }}
-                />
+                {buttonContents}
               </Button>
             </Grid>
           </Grid>
@@ -382,20 +429,27 @@ const Conatact = ({ setValue }) => {
                     !phoneHelper
                   )
                 }
-                onClick={() => setOpen(true)}
+                onClick={onConfirm}
               >
-                Send Message{" "}
-                <img
-                  src={airplane}
-                  alt="airplane"
-                  style={{ marginLeft: "1em" }}
-                />
+                {loading ? (
+                  <CircularProgress size={30} color="primary" />
+                ) : (
+                  buttonContents
+                )}
               </Button>
             </Grid>
           </Grid>
         </DialogContent>
       </Dialog>
 
+      <Snackbar
+        open={alert.open}
+        message={alert.message}
+        ContentProps={{ style: { backgroundColor: alert.backgroundColor } }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        onClose={() => setAlert((prev) => ({ ...prev, open: false }))}
+        autoHideDuration={4000}
+      />
       <Grid
         item
         lg={8}
