@@ -12,6 +12,7 @@ import Websites from "./Websites";
 import Revolution from "./Revolution";
 import About from "./About";
 import Contact from "./Conatact";
+import Estimate from "./Estimate";
 import Theme from "./ui/Theme";
 
 const App = () => {
@@ -113,7 +114,17 @@ const App = () => {
               />
             )}
           />
-          <Route exact path="/estimate" component={() => <div>Estimate</div>} />
+          <Route
+            exact
+            path="/estimate"
+            render={(routeProps) => (
+              <Estimate
+                {...routeProps}
+                setValue={setValue}
+                setSelectedIndex={setSelectedIndex}
+              />
+            )}
+          />
         </Switch>
         <Footer setValue={setValue} setSelectedIndex={setSelectedIndex} />
       </BrowserRouter>
